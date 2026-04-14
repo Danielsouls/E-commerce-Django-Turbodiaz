@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- Bootstrap versión estable -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+        
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet" />
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+
+        <!--PaARARESEÑAS-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+    </head>
+    <body>
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo Diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <a href="{% url 'menu' %}" class="logo-text">Turbo Diaz</a>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'servicios' %}">Servicios</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                    <li><a href="{% url 'dondeestamos' %}">Donde Estamos</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Compras & Datos
+                        </button>
+                        <ul class="dropdown-menu" style="color: red;">
+                        <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <li><a href="#" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %}                     
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+        <!--Informacion Compromiso-->
+        <section class="page-section cta">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-xl-9 mx-auto">
+                        <div class="cta-inner bg-faded text-center rounded" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">TÉRMINOS Y CONDICIONES DE USO</span>
+                                <span class="section-heading-lower">Fecha de última actualización: [2024]</span>
+                            </h2>
+                            <p class="mb-0">
+                                Bienvenido a turbodiaz.cl. Al acceder o utilizar este sitio web, usted acepta cumplir con los siguientes términos y condiciones. Si no está de acuerdo con estos términos, por favor, no utilice este sitio.
+                                <br><br>
+                                
+                                1. Uso del Sitio Web
+                                <br>
+                                El sitio web turbodiaz.cl es operado por Turbo Díaz, un servicio especializado en la reparación y mantenimiento de turbos para vehículos. El uso de nuestro sitio web está sujeto a la aceptación y cumplimiento de estos términos y condiciones. Al utilizar este sitio, usted garantiza que tiene la capacidad legal para cumplir con estos términos.
+                                <br><br>
+                                2. Servicios
+                                <br><br>
+                                Los servicios ofrecidos en turbodiaz.cl incluyen, pero no se limitan a, reparación, mantenimiento y asesoría técnica para turbos de vehículos. Turbo Díaz ofrece una garantía de 3 meses para los servicios realizados, cubriendo defectos de fabricación o mal funcionamiento de los turbos reparados durante este período. La garantía es válida únicamente para el servicio específico que se haya realizado y no cubre daños causados por mal uso, accidentes o factores externos. Turbo Díaz se reserva el derecho de verificar las condiciones del turbo antes de aceptar una solicitud de garantía.
+                                Turbo Díaz se reserva el derecho de modificar, actualizar o descontinuar cualquiera de los servicios en cualquier momento sin previo aviso.
+                                <br><br>
+                                3. Propiedad Intelectual
+                                <br><br>
+                                Todo el contenido presente en turbodiaz.cl, incluidos textos, imágenes, gráficos, logotipos, videos y software, está protegido por derechos de propiedad intelectual. Queda prohibida la reproducción, distribución, modificación o uso comercial de dicho contenido sin el consentimiento explícito de Turbo Díaz.
+                                <br><br>
+                                4. Responsabilidad
+                                <br><br>
+                                Turbo Díaz no será responsable de ningún daño directo, indirecto, incidental, especial o consecuente que resulte del uso o la incapacidad de utilizar el sitio web, sus servicios o cualquier otra información contenida en el sitio.
+                                <br><br>
+                                5. Enlaces Externos
+                                <br><br>
+                                Nuestro sitio web puede contener enlaces a sitios web de terceros que no son operados por nosotros. No nos responsabilizamos por el contenido, políticas de privacidad o prácticas de estos sitios externos. Recomendamos revisar los términos y condiciones de dichos sitios antes de utilizar sus servicios.
+                                <br><br>
+                                6. Modificaciones a los Términos y Condiciones
+                                <br><br>
+                                Turbo Díaz se reserva el derecho de actualizar o modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigencia inmediatamente después de su publicación en el sitio web. Le recomendamos revisar regularmente esta sección para estar al tanto de cualquier cambio.
+                                <br><br>
+                                7. Privacidad
+                                <br><br>
+                                La privacidad de nuestros usuarios es importante para nosotros. Puede consultar nuestra Política de Privacidad para obtener información detallada sobre cómo recopilamos, usamos y protegemos su información personal.
+                                <br><br>
+                                7. Privacidad
+                                <br><br>
+                                La privacidad de nuestros usuarios es importante para nosotros. Puede consultar nuestra Política de Privacidad para obtener información detallada sobre cómo recopilamos, usamos y protegemos su información personal.
+                                <br><br>
+                                8. Ley Aplicable
+                                <br><br>
+                                Estos términos y condiciones se regirán e interpretarán de acuerdo con las leyes de Chile. Cualquier disputa relacionada con el uso del sitio web o los servicios ofrecidos será resuelta en los tribunales competentes de Chile.
+                                <br><br>
+                                9. Contacto
+                                <br><br>
+                                Si tiene alguna pregunta o inquietud sobre estos términos y condiciones, puede ponerse en contacto con nosotros a través de los siguientes medios:
+                                <br><br>
+                                Correo electrónico: [raul@turbodiaz.cl]
+                                Teléfono: [+569 99463203]
+                                Dirección: [panamericana 5 sur, KM 681, Padre las casas, Chile]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Footer-->
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                    <p>Potenciamos tu motor con precisión y confianza.</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                    </div>
+                </div>
+        
+                <div class="footer-links">
+                    <div>
+                        <h4>Portal clientes</h4>
+                        <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                        
+                        <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                    </div>
+                    <div>
+                        <h4>Atención al cliente</h4>
+                        <a href="tel:+56999463203">+569 99463203/a>
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </div>
+                    <div>
+                        <h4>Páginas</h4>
+                        <a href="#">Inicio</a>
+                        <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                        <a href="{% url 'home_inicio' %}">productos</a>
+                        <a href="{% url 'nosotros' %}">Nosotros</a>
+                        <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                    </div>
+                    <div>
+                        <h4>Ayuda</h4>
+                        <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                        <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                        <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                        <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>               
+        
+        <!-- AOS-->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+        <!--libreria externas-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+        
+        <!-- arlet JS-->
+        <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+        <!-- PARA RESEÑAS-->
+         
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!--DESPUES PEGAR A TODOS-->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    </body>
+</html>

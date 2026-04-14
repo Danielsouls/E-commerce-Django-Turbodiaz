@@ -1,0 +1,16 @@
+{
+    "debug":true,
+    "base_url": "http://127.0.0.1:8000/",
+    "user": "root",
+    "password": "",
+    "server": "localhost",
+    "bd": "turbodiaz_django",
+    "puerto":3306,
+    "paginacion":10,
+    "ruta":"C:/Users/dan_drang/Desktop/",
+    "ruta2":"C:/Users/dan_drang/Desktop/turbodiaz/",
+    "webpay_url":"https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.2/transactions",
+	"webpay_id":"597055555532",
+	"webpay_secret":"579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"
+
+}

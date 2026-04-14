@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- Bootstrap versión estable -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+        
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet" />
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+
+        <!--PaARARESEÑAS-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+    </head>
+    <body>
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo Diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <a href="{% url 'menu' %}" class="logo-text">Turbo Diaz</a>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'servicios' %}">Servicios</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                    <li><a href="{% url 'dondeestamos' %}">Donde Estamos</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Compras & Datos
+                        </button>
+                        <ul class="dropdown-menu" style="color: red;">
+                        <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <li><a href="#" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %}                     
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+        <!--Informacion Compromiso-->
+        <section class="page-section cta">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-xl-9 mx-auto">
+                        <div class="cta-inner bg-faded text-center rounded" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">Garantia</span>
+                                <span class="section-heading-lower">Fecha de última actualización: [2024]</span>
+                            </h2>
+                            <p class="mb-0">
+                                <strong>Garantía de 3 Meses - Turbo Díaz</strong>
+                                <br><br>
+                                En <strong>Turbo Díaz</strong>, nos comprometemos con la calidad de nuestro trabajo y la satisfacción de nuestros clientes. Por eso, todos los servicios realizados en nuestro taller cuentan con una garantía de <strong>3 meses</strong>, diseñada para brindarle confianza y respaldo después de cada reparación o mantenimiento.
+                                <br><br>
+                                <strong>Condiciones de la Garantía</strong>
+                                <br>
+                                - La garantía cubre defectos de fabricación o mal funcionamiento de los componentes reparados o instalados durante este período. <br>
+                                - La garantía aplica exclusivamente al servicio realizado en nuestro taller, y no cubre daños ocasionados por: <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;- Mal uso del vehículo. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;- Accidentes o choques. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;- Falta de mantenimiento adecuado o negligencia. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;- Factores externos como inundaciones, incendios, o manipulación por terceros.
+                                <br><br>
+                                <strong>Proceso para Solicitar la Garantía</strong>
+                                <br>
+                                1. Si experimenta algún inconveniente relacionado con el servicio brindado, contáctenos de inmediato para evaluar la situación. <br>
+                                2. Nuestro equipo técnico inspeccionará el vehículo y determinará si el problema está cubierto por la garantía. <br>
+                                3. En caso de aplicar, realizaremos las reparaciones necesarias sin costo adicional.
+                                <br><br>
+                                <strong>Limitaciones</strong>
+                                <br>
+                                La garantía no incluye piezas que estén sujetas a desgaste natural, como filtros, aceites, bujías o correas, salvo que hayan sido reemplazadas como parte del servicio y presenten fallas prematuras debido a defectos de instalación.
+                                <br><br>
+                                <strong>Compromiso con Nuestros Clientes</strong>
+                                <br>
+                                En Turbo Díaz, entendemos la importancia de un vehículo en perfecto estado. Por ello, trabajamos con piezas de alta calidad y herramientas especializadas para garantizar que su automóvil reciba el mejor cuidado. Si tiene preguntas sobre la cobertura de la garantía o necesita asistencia, no dude en contactarnos.
+                                <br><br>
+                                <strong>Contáctenos</strong>
+                                <br>
+                                - <strong>Correo electrónico</strong>: raul@turbodiaz.cl <br>
+                                - <strong>Teléfono</strong>: +569 99463203 <br>
+                                - <strong>Dirección</strong>: Panamericana 5 Sur, KM 681, Padre Las Casas, Chile
+                                <br><br>
+                                Su confianza es nuestra prioridad. ¡Gracias por elegir <strong>Turbo Díaz</strong>!
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Footer-->
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                    <p>Potenciamos tu motor con precisión y confianza.</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                    </div>
+                </div>
+        
+                <div class="footer-links">
+                    <div>
+                        <h4>Portal clientes</h4>
+                        <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                        
+                        <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                    </div>
+                    <div>
+                        <h4>Atención al cliente</h4>
+                        <a href="tel:+56999463203">+569 99463203/a>
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </div>
+                    <div>
+                        <h4>Páginas</h4>
+                        <a href="#">Inicio</a>
+                        <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                        <a href="{% url 'home_inicio' %}">productos</a>
+                        <a href="{% url 'nosotros' %}">Nosotros</a>
+                        <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                    </div>
+                    <div>
+                        <h4>Ayuda</h4>
+                        <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                        <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                        <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                        <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>               
+    
+        <!-- AOS-->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+        <!--libreria externas-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+        
+        <!-- arlet JS-->
+        <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+        <!-- PARA RESEÑAS-->
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <!--DESPUES PEGAR A TODOS-->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    </body>
+</html>

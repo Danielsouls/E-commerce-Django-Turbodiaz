@@ -1,0 +1,679 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- Bootstrap versión estable -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        
+
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet" />
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <!--PaARARESEÑAS-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    </head>
+    <body>
+
+        <!-- Whatsapp -->
+        <audio id="sonido">
+            <source src="{% static 'audio/WhatsApp.mp3' %}" type="audio/mp3">
+            Tu navegador no admite audio HTML5.
+        </audio>
+        <a href="https://api.whatsapp.com/send?phone=56950514962&text=Turbodiaz:Hola%20habla%20con%20nosotros!" 
+        class="float whatsapp-turbodiaz" 
+        title="Estamos disponibles. Cuéntanos en qué te podemos ayudar!!!" 
+        target="_blank" 
+        data-aos="fade-down-left" 
+        data-aos-duration="3000" 
+        onclick="playSound()">
+            <div class="loader whatsapp-turbodiaz-loader"></div>
+            <i class="fab fa-whatsapp my-float whatsapp-turbodiaz-icon"></i>
+        </a>
+        <!-- Whatsapp fin -->
+
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <span class="logo-text">Turbodiaz</span>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'servicios' %}">Servicios</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                    <li><a href="{% url 'home_inicio' %}">productos</a></li>
+                    <li><a href="{% url 'dondeestamos' %}">Donde Estamos</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Compras & Datos
+                        </button>
+                        <ul class="dropdown-menu" style="color: red;">
+                        <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+
+                    {% else %}
+                    <li><a href="{% url 'acceso_login' %}" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %}                     
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- Botón del Chatbot -->
+                <div class="chatbot-icon">
+                    <button id="openChatbot" class="btn btn-chatbot">
+                        <i class="fas fa-robot"></i> Chat
+                    </button>
+                </div>  
+            </div>
+        </nav>
+        <!--COHERE-->
+        <div id="chatbotContainer" class="chatbot-container hidden">
+            <div class="chatbot-header">
+                <h5>Turbo Bot</h5>
+                <button id="resetChatbot" class="reset-chatbot">↻</button>
+                <button id="closeChatbot" class="close-chatbot">&times;</button>
+            </div>
+            <div class="chatbot-body">
+                <div id="chatMessages" class="chat-messages"></div>
+                <form id="chatForm">
+                    <input type="text" id="userInput" placeholder="Escribe tu pregunta sobre turbos..." required />
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+        
+        <!--Titulo informacion -->
+        <br><br>
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-upper text-primary mb-3">Bienvenidos y Bienvenidas</span>
+                <span class="site-heading-lower">Somos una empresa 100% regional</span>
+            </h1>
+        </div>
+        <!--TITULO-->
+        <h1 class="titulo">Turbodiaz</h1>
+        <br><br>
+        <!---Informacion-->
+        <section class="page-section clearfix">
+            <div class="container">
+                <div class="intro">
+                    <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="../../assets/images/menu/verificar.jpeg" alt="..." />
+                    <div class="intro-text left-0 text-center bg-faded p-5 rounded">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Profecional y Confiable</span>
+                            <span class="section-heading-lower">¡Recupera la potencia y eficiencia de tu vehículo!</span>
+                        </h2>
+                        <p class="mb-3">Somos especialistas en la reparación de turbos, brindando soluciones rápidas, efectivas y de alta calidad. Con 21 años de experiencia en el sector, nuestros mecánicos capacitados garantizan que tu turbo vuelva a funcionar como nuevo.</p>
+                        <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="{% url 'servicios' %}">servicios</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Titulo CATEGORIAS-->
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-upper text-primary mb-3">Categorías</span>
+                <span class="site-heading-upper text-primary mb-3">Resparamos cualquier clase de turbos</span>
+            </h1>
+        </div>
+        <!-- Categorias-->
+        <section class="categorias-section">   
+            <div class="categorias-card-container">
+                <!-- Tarjeta 1 -->
+                <div class="categorias-card">
+                    <div class="categorias-card-image">
+                        <img src="{% static 'images/categorias/autos.jpeg'%}" alt="Marvel" class="default-img">
+                        <img src="{% static 'images/categorias/t_auto.png'%}" alt="Marvel Shirt" class="hover-img">
+                    </div>
+                    <h3>vehiculos livianos</h3>
+                    <button class="card-btn" onclick="mostrarModal('Algunas Turbos Populares', '{% static 'images/categorias/info_auto.png' %}')">Turbos</button>
+
+                </div>
+                <!-- Tarjeta 2 -->
+                <div class="categorias-card">
+                    <div class="categorias-card-image">
+                        <img src="{% static 'images/categorias/bus.jpeg'%}" alt="Mario" class="default-img">
+                        <img src="{% static 'images/categorias/t_camion.png'%}" alt="Mario Hat" class="hover-img">
+                    </div>
+                    <h3>Buses y camiones</h3>
+                    <button class="card-btn" onclick="mostrarModal('Algunas Turbos Populares', '{% static 'images/categorias/info_camion.png' %}')">Turbos</button>
+                </div>
+                <!-- Tarjeta 3 -->
+                <div class="categorias-card">
+                    <div class="categorias-card-image">
+                        <img src="{% static 'images/categorias/mineria.jpeg'%}" alt="DC Comics" class="default-img">
+                        <img src="{% static 'images/categorias/t_maquinaria.png'%}" alt="DC Shirt" class="hover-img">
+                    </div>
+                    <h3>Maquinarias de Construcción</h3>
+                    <button class="card-btn" onclick="mostrarModal('Algunas TurbosPopulares', '{% static 'images/categorias/info_maquinaria.png' %}')">Turbos</button>
+                </div>
+                <!-- Tarjeta 4 -->
+                <div class="categorias-card">
+                    <div class="categorias-card-image">
+                        <img src="{% static 'images/categorias/generador.jpeg'%}" alt="Star Wars" class="default-img">
+                        <img src="{% static 'images/categorias/t_energia.png'%}" alt="Star Wars Shirt" class="hover-img">
+                    </div>
+                    <h3>Generadores de Energia</h3>
+                    <button class="card-btn" onclick="mostrarModal('Algunas Turbos Populares', '{% static 'images/categorias/info_energia.png' %}')">Turbos</button>
+                </div>
+                <!-- Tarjeta 5 -->
+                <div class="categorias-card">
+                    <div class="categorias-card-image">
+                        <img src="{% static 'images/categorias/barco.jpeg'%}" alt="Pokemon" class="default-img">
+                        <img src="{% static 'images/categorias/t_marino.png'%}" alt="Pokemon Shirt" class="hover-img">
+                    </div>
+                    <h3>Motores Maritimos</h3>
+                    <button class="card-btn" onclick="mostrarModal('Algunas Turbos Populares', '{% static 'images/categorias/info_marino.png' %}')">Turbos</button>
+                </div>
+            </div>
+        </section>
+        <!--VENTANA EMERGENTE-->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="cerrarModal()">&times;</span>
+                <img id="modal-img" src="" alt="Imagen">
+                <h3 id="modal-title">Algunas turbos mas populares</h3>
+            </div>
+        </div>
+        <!--TITULO NUESTRO TRABAJO-->
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-upper text-primary mb-3">Nuestro trabajo</span>
+            </h1>
+        </div>
+        <!--Cards Nuestro Trabajo-->
+        <section class="projects-section bg-light" id="projects">
+            <div class="container px-4 px-lg-5">
+                <!-- Project One Row-->
+                <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                    <div class="col-lg-6" ><img  class="img-fluid" src="{% static 'images/trabajo1.jpg' %}" alt="..."/></div>
+                    <div class="col-lg-6">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-left">
+                                    <h4 class="text-white">Esto es lo que recibimos</h4>
+                                    <p class="mb-0 text-white-50">El maltrato al que esta expuesto este dispositivo requiere una mantencion que generalmente no se hace, y este se va deteriorando, es asi como llegan a nuestro taller</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project Two Row-->
+                <div class="row gx-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="{% static 'images/trabajo2.jpg' %}" alt="..."/></div>
+                    <div class="col-lg-6 order-lg-first">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-right">
+                                    <h4 class="text-white">Esto es lo que despachamos</h4>
+                                    <p class="mb-0 text-white-50">Luego de minuciosos prosesos de reparacion, mecanizado y tratamientos, el turbo es devuelto al cliente y esta listo para utilizarse.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>           
+        <!--HORARIO-->
+        <section class="page-section cta">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-9 mx-auto">
+                        <div class="cta-inner bg-faded text-center rounded">
+                            <h2 class="section-heading mb-5">
+                                <span class="section-heading-upper">Horario de Atención</span>
+                                <span class="section-heading-lower">te esperamos</span>
+                            </h2>
+                            <ul class="list-unstyled list-hours mb-5 text-left mx-auto">
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Lunes
+                                    <span class="ms-auto">09:00 - 13:00 y 14:00 - 18:00</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Marte
+                                    <span class="ms-auto">09:00 - 13:00 y 14:00 - 18:00</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Miercoles
+                                    <span class="ms-auto">09:00 - 13:00 y 14:00 - 18:00</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Jueves
+                                    <span class="ms-auto">09:00 - 13:00 y 14:00 - 18:00</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Viernes
+                                    <span class="ms-auto">09:00 - 13:00 y 14:00 - 18:00</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Sabado
+                                    <span class="ms-auto">Cerrado</span>
+                                </li>
+                                <li class="list-unstyled-item list-hours-item d-flex">
+                                    Domingo
+                                    <span class="ms-auto">Cerrado</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Informacion Compromiso-->
+        <section class="page-section cta">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-xl-9 mx-auto">
+                        <div class="cta-inner bg-faded text-center rounded" >
+                            <h2 class="section-heading mb-4">
+                                <span class="section-heading-upper">¿Por qué elegirnos?</span>
+                                <span class="section-heading-lower">por que somos</span>
+                            </h2>
+                            <p class="mb-0">- Expertos Certificados: Con años de experiencia en reparación y mantenimiento de turbos.<br>
+                                            - Calidad Garantizada: Usamos repuestos de la más alta calidad y las últimas tecnologías en reparación.<br>
+                                            - Servicio Rápido: Sabemos lo importante que es tu vehículo, por eso nos comprometemos a brindarte tiempos de reparación rápidos y eficientes.<br>
+                                            - Precios Transparentes: Ofrecemos cotizaciones claras y sin sorpresas, adaptadas a tu presupuesto.              
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Portfolio RECOMENDACIONES-->
+        <section class="content-section" id="portfolio" style="background: -webkit-radial-gradient(#ffffff,#003eb1);">
+            <div class="container px-4 px-lg-5">
+                <div class="content-section-heading text-center">
+                    <h3 class="text-secondary mb-0">Recomendaciones</h3>
+                    <h2 class="mb-5">Siempre que usted repare o compre un turbo nuevo como minimo usted debera seguir estas recomendaciones</h2>
+                </div>
+                <div class="row gx-0">
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">1</div>
+                                    <p class="mb-0">Cambiar filtro de aire.</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/cambiar.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">2</div>
+                                    <p class="mb-0">Limpiar el intercooler del vehiculo. (En caso de tener uno).</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/limpiar.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">3</div>
+                                    <p class="mb-0">Cambiar aceite y filtro de aceite.</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/cambiar_aceite.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">4</div>
+                                    <p class="mb-0">Verificar el apriete de todas las mangueras y que no queden fugas en los multiples de admision y escape.</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/verificar.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">5</div>
+                                    <p class="mb-0">Al arrancar el vehiculo nunca se debe acelerar de inmediato mantenga en ralenti el motor al menos 1 minuto luego acelerar de manera pausada.</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/hechar.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="portfolio-item" href="#!">
+                            <div class="caption">
+                                <div class="caption-content">
+                                    <div class="h2">6</div>
+                                    <p class="mb-0">Al detener el vehiculo siempre se debe dejar el motor en ralenti al menos por dos minutos.</p>
+                                </div>
+                            </div>
+                            <img class="img-fluid" src="{% static 'images/menu/detener.jpeg' %}" alt="..." />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- RESEÑAS -->
+        <section class="page-section clearfix" style="color: #fff;">
+            <div class="container">
+                <h1 class="site-heading text-center text-faded">
+                    <span class="site-heading-lower">Reseñas de nuestros clientes</span>
+                </h1>
+                <div class="accordion d-flex justify-content-center align-items-center height" id="accordionExample">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="p-3">
+                                <ul class="testimonial-list" >
+                                    <li>
+                                        <div class="card p-3" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="../../assets/images/google.png" width="50" class="rounded-circle">
+                                                <div class="d-flex flex-column ms-2">
+                                                    <span class="fw-normal">Hernan antonio paredes acevedo</span>
+                                                    <span>Hace 6 años</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="card p-3" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="../../assets/images/google.png" width="50" class="rounded-circle">
+                                                <div class="d-flex flex-column ms-2">
+                                                    <span class="fw-normal">Luz Figueroa</span>
+                                                    <span>Hace 6 años</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="card p-3" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="../../assets/images/google.png" width="50" class="rounded-circle">
+                                                <div class="d-flex flex-column ms-2">
+                                                    <span class="fw-normal">Chilegruas Rescate Todo El Pais</span>
+                                                    <span>Hace 3 años</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 testimonials-margin">
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <h4>Excelente trabajo realizado. </h4>
+                                        <div class="ratings">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <p>Me entregaron el turbo de un día para otro.<br> Se nota la calidad del trabajo. <br>Me lo recomendaron varias personas <br>y desde hoy, yo también lo recomendare.</p>
+                                    </div>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <h4>El mejor en turbos</h4>
+                                        <div class="ratings">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <p>serio responsable,honesto</p>
+                                    </div>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <h4>MUY PROFESIONAL SU TRABAJO</h4>
+                                        <div class="ratings">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                        <p>NADA QUE ENVIDIAR A LOS GRANDES <br>TALLERES BIEN EQUIPADO <br>Y DA GARANTÍAS <br> ADEMAS DEVUELVEN <br> LOS RPTOS USADOS.</p>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="https://www.google.cl/search?q=turbo+diaz&sca_esv=825ec49c2d0202bf&sxsrf=ADLYWIIXrLfovlIhk7OoFzUXxvgAGHJsYQ%3A1731732301805&source=hp&ei=TSM4Z5jJLo3V5OUPnpOIuQY&iflsig=AL9hbdgAAAAAZzgxXVV3QX0zkw4dx3-2G76zeL85BI4a&oq=tur&gs_lp=Egdnd3Mtd2l6IgN0dXIqAggAMgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMg4QLhiABBixAxjRAxjHATIIEC4YgAQYsQMyCBAAGIAEGLEDMgsQABiABBixAxiKBTIOEC4YgAQYsQMY0QMYxwEyCBAAGIAEGLEDMggQABiABBixA0jzD1AAWNMBcAB4AJABAJgB-gGgAY0EqgEFMC4yLjG4AQHIAQD4AQGYAgOgAskEwgILEAAYgAQYsQMYgwHCAg4QABiABBixAxiDARiKBcICBRAAGIAEwgIREC4YgAQYsQMY0QMYgwEYxwHCAgUQLhiABJgDAJIHBTAuMi4xoAe1Iw&sclient=gws-wiz#lrd=0x9614d739d138c335:0xdc27ede1612dfc99,1,,,,">ver mas comentarios</a></div>
+                    </div>
+                </div>
+            </div>
+        </section> 
+        <!--TITULO GALERIA-->
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-upper text-primary mb-3">GALERÍA</span>
+            </h1>
+        </div>
+        <!--GALERIA-->
+        <section class="galeria">
+            <div class="galeria-container">
+                <div class="imagen-item">
+                    <img src="../../assets/images/galeria/1.jpg" alt="Imagen 1">
+                    <div class="zoom">
+                        <img src="../../assets/images/galeria/2.jpg" alt="Zoom Imagen 1">
+                    </div>
+                </div>
+                <div class="imagen-item">
+                    <img src="../../assets/images/galeria/5.jpg" alt="Imagen 2">
+                    <div class="zoom">
+                        <img src="../../assets/images/galeria/6.jpg" alt="Zoom Imagen 2">
+                    </div>
+                </div>
+                <div class="imagen-item">
+                    <img src="../../assets/images/galeria/3.jpg" alt="Imagen 2">
+                    <div class="zoom">
+                        <img src="../../assets/images/galeria/7.jpg" alt="Zoom Imagen 2">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--PRUEBA-->
+
+        <!--Contactos-->
+        <section id="contacto">
+            <h2>Contáctenos</h2>
+            <div class="contact-info">
+                <!-- Teléfono -->
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="contact-text">
+                        <a href="tel:+56999463203">+569 99463203</a>
+                    </span>
+                </div>
+                <!-- Correo Electrónico -->
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span class="contact-text">
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </span>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <!--Footer-->
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                    <p>Potenciamos tu motor con precisión y confianza.</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                    </div>
+                </div>
+        
+                <div class="footer-links">
+                    <div>
+                        <h4>Portal clientes</h4>
+                        <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                        
+                        <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                    </div>
+                    <div>
+                        <h4>Atención al cliente</h4>
+                        <a href="tel:+56999463203">+569 99463203/a>
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </div>
+                    <div>
+                        <h4>Páginas</h4>
+                        <a href="#">Inicio</a>
+                        <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                        <a href="{% url 'home_inicio' %}">productos</a>
+                        <a href="{% url 'nosotros' %}">Nosotros</a>
+                        <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                    </div>
+                    <div>
+                        <h4>Ayuda</h4>
+                        <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                        <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                        <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                        <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>               
+        
+        <!-- AOS-->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+        <!--libreria externas-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+        
+        <!-- arlet JS-->
+        <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+        <!-- PARA RESEÑAS-->
+         
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <!--DESPUES PEGAR A TODOS-->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        <!--COHERE-->
+        <script>
+            document.getElementById("openChatbot").addEventListener("click", function () {
+                document.getElementById("chatbotContainer").classList.remove("hidden");
+            });
+        
+            document.getElementById("closeChatbot").addEventListener("click", function () {
+                document.getElementById("chatbotContainer").classList.add("hidden");
+            });
+        
+            document.getElementById("chatForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+        
+                const userMessage = document.getElementById("userInput").value;
+                const chatMessages = document.getElementById("chatMessages");
+        
+                // Mostrar el mensaje del usuario
+                const userBubble = document.createElement("div");
+                userBubble.className = "user-message";
+                userBubble.innerHTML = '<strong style="color: red;">Usuario:</strong> ' + userMessage;
+                chatMessages.appendChild(userBubble);
+        
+                // Enviar la pregunta al backend
+                const response = await fetch("/api/chatbot/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userMessage }),
+                });
+        
+                const data = await response.json();
+        
+                // Mostrar la respuesta del chatbot
+                const botBubble = document.createElement("div");
+                botBubble.className = "bot-message";
+                botBubble.innerHTML = '<strong style="color: blue;">Bot:</strong> ' + data.response;
+                chatMessages.appendChild(botBubble);
+        
+                // Limpiar el input
+                document.getElementById("userInput").value = "";
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+            document.getElementById("resetChatbot").addEventListener("click", function () {
+                const chatMessages = document.getElementById("chatMessages");
+                chatMessages.innerHTML = '';  // Eliminar todos los mensajes
+                document.getElementById("userInput").value = '';  // Limpiar el campo de entrada
+            });
+        </script>
+    </body>
+</html>

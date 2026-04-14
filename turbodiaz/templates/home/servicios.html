@@ -1,0 +1,540 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- boostrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+       
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet"/>
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <!-- Whatsapp -->
+          <audio id="sonido">
+            <source src="{% static 'audio/WhatsApp.mp3' %}" type="audio/mp3">
+            Tu navegador no admite audio HTML5.
+          </audio>
+        <a href="https://api.whatsapp.com/send?phone=56950514962&text=Turbodiaz:Hola%20habla%20con%20nosotros!" 
+        class="float whatsapp-turbodiaz" 
+        title="Estamos disponibles. Cuéntanos en qué te podemos ayudar!!!" 
+        target="_blank" 
+        data-aos="fade-down-left" 
+        data-aos-duration="3000" 
+        onclick="playSound()">
+            <div class="loader whatsapp-turbodiaz-loader"></div>
+            <i class="fab fa-whatsapp my-float whatsapp-turbodiaz-icon"></i>
+        </a>
+      <!-- Whatsapp fin -->
+         
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo Diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <a href="{% url 'menu' %}" class="logo-text">Turbo Diaz</a>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'menu' %}">Inicio</a></li>
+                    <li><a href="{% url 'home_inicio' %}">Productos</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                      <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      Compras & Datos
+                      </button>
+                      <ul class="dropdown-menu" style="color: red;">
+                      <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                      <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                      <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                      </ul>
+                    </div>
+                    {% else %}
+                    <li><a href="#" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %} 
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- Botón del Chatbot -->
+                <div class="chatbot-icon">
+                  <button id="openChatbot" class="btn btn-chatbot">
+                      <i class="fas fa-robot"></i> Chat
+                  </button>
+                </div>  
+            </div>
+        </nav>
+        <!--COHERE-->
+        <div id="chatbotContainer" class="chatbot-container hidden">
+          <div class="chatbot-header">
+              <h5>Turbo Bot</h5>
+              <button id="resetChatbot" class="reset-chatbot">↻</button>
+              <button id="closeChatbot" class="close-chatbot">&times;</button>
+          </div>
+          <div class="chatbot-body">
+              <div id="chatMessages" class="chat-messages"></div>
+              <form id="chatForm">
+                  <input type="text" id="userInput" placeholder="Escribe tu pregunta sobre turbos..." required />
+                  <button type="submit">Enviar</button>
+              </form>
+          </div>
+        </div>
+        <!--informacion titulo-->
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-lower">Nuestros Servicios</span>
+            </h1>
+        </div>
+        <!---Informacion-->
+        <section class="page-section clearfix">
+            <div class="container">
+                <div class="intro">
+                    <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="../../assets/images/pagando.jpg" alt="..." />
+                    <div class="intro-text left-0 text-center bg-faded p-5 rounded">
+                        <h2 class="section-heading mb-4">
+                            <span class="section-heading-upper">Un Servicio</span>
+                            <span class="section-heading-lower">Profecional y Confiable</span>
+                        </h2>
+                        <p class="mb-3">En Turbo Díaz, nos especializamos en la reparación y mantenimiento de turbos para vehículos, brindando soluciones de alta calidad para asegurar el óptimo rendimiento de tu motor. Con un equipo de técnicos expertos y equipos avanzados, garantizamos un servicio eficiente y confiable, para que tu turbo funcione como nuevo y tu vehículo recupere su máximo rendimiento.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--SERVICIOS CARDS-->
+        <section class="servicios">
+            <!-- SERVICIO 1-->
+            <div class="card">
+              <div class="card__border"></div>
+              <div class="card_title__container">
+                <span class="card_title">REVICIÓN Y EVALUACIÓN DEL TURBO</span>
+                <p class="card_paragraph">$10.000 CLP</p>
+              </div>
+              <hr class="line" />
+              <ul class="card__list">
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Diagnóstico Completo: Inspección detallada del turbo para detectar desgastes, fisuras, fugas de aceite, o daños en componentes clave como el rotor, carcasa y cojinetes.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Pruebas de Desempeño: Evaluación del rendimiento del turbo en condiciones simuladas, incluyendo pruebas de presión, flujo de aire y comportamiento a altas revoluciones.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Informe Técnico: Entrega de un reporte detallado que incluye el estado actual del turbo, posibles causas de fallas, y recomendaciones para mantenimiento o reparación.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Servicio Personalizado: Adaptación de la revisión según el tipo de aplicación (vehículo, transporte pesado, maquinaria marina, etc.) para garantizar un análisis específico y adecuado.</span>
+                </li>
+              </ul>
+              <button class="button" onclick="mostrarModal('Pide este servicio o producto sin necesidad de logiarte. Hablanos por whatsapp para pedir este servicio', '{% static 'images/info_pagar.jpg' %}')">Antes de cotizar</button>
+              <div class="d-flex">
+                <a href="https://api.whatsapp.com/send?phone=+56999463203&text=Hola%20necesito%20informaci%C3%B3n%20del%20servicio%20de REVICIÓN Y EVALUACIÓN DEL TURBO" class="boton_cotizar_whatsapp" title="Pedir por whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Pedir por whatsapp</a>
+              </div>
+            </div>
+          
+            <!-- SERVICIO 2 -->
+            <div class="card">
+              <div class="card__border"></div>
+              <div class="card_title__container">
+                <span class="card_title">EVALUACIÓN EN TERRENO</span>
+                <p class="card_paragraph">COSTOS POR KILOMETRO</p>
+              </div>
+              <hr class="line" />
+              <ul class="card__list">
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Diagnóstico In Situ: Inspección del sistema del turbo directamente en el lugar donde opera el vehículo o la maquinaria, asegurando una evaluación realista de su funcionamiento bajo condiciones de uso.
+                  </span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Pruebas Operativas: Realización de pruebas de desempeño en terreno, incluyendo análisis de presión de admisión, temperatura de gases de escape y rendimiento general del turbo durante el trabajo activo.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Asesoramiento Técnico Personalizado: Recomendaciones inmediatas y soluciones específicas para mejorar el desempeño del turbo o resolver fallas detectadas, adaptadas a las necesidades y operación del cliente.</span>
+                </li>
+              </ul>
+              <button class="button" onclick="mostrarModal('Pide este servicio o producto sin necesidad de logiarte. Hablanos por whatsapp para pedir este servicio', '{% static 'images/info_pagar.jpg' %}')">Antes de cotizar</button>
+              <div class="d-flex">
+                <a href="https://api.whatsapp.com/send?phone=+56999463203&text=Hola%20necesito%20informaci%C3%B3n%20del%20servicio%20de EVALUACIÓN EN TERRENO" class="boton_cotizar_whatsapp" title="Pedir por whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Pedir por whatsapp</a>
+              </div>
+            </div>
+          
+            <!-- SERVICO 3 -->
+            <div class="card">
+              <div class="card__border"></div>
+              <div class="card_title__container">
+                <span class="card_title">DIAGNOSTICO DE VALBULA ELECTRONICA</span>
+                <p class="card_paragraph">$20.000 CLP</p>
+              </div>
+              <hr class="line" />
+              <ul class="card__list">
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Revisión de Funcionamiento Eléctrico: Inspección de los componentes eléctricos y electrónicos de la válvula, incluyendo sensores, conexiones y cables, para asegurarse de que estén operando correctamente.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Pruebas de Respuesta de la Válvula: Realización de pruebas para verificar cómo responde la válvula electrónica bajo diferentes condiciones de carga, asegurando que abra y cierre correctamente en función de las señales de control del sistema.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Verificación de Integración con el Sistema de Gestión del Motor: Comprobación de la interacción de la válvula electrónica con el sistema de gestión del motor (ECU) para asegurar que esté funcionando correctamente dentro del sistema global del vehículo o maquinaria.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Escaneo Electrónico Completo: Utilización de herramientas de diagnóstico avanzadas para escanear los sensores, actuadores y circuitos eléctricos de la válvula electrónica, detectando cualquier fallo en los componentes eléctricos.</span>
+                </li>
+              </ul>
+              <button class="button" onclick="mostrarModal('Pide este servicio o producto sin necesidad de logiarte. Hablanos por whatsapp para pedir este servicio', '{% static 'images/info_pagar.jpg' %}')">Antes de cotizar</button>
+              <div class="d-flex">
+                <a href="https://api.whatsapp.com/send?phone=+56999463203&text=Hola%20necesito%20informaci%C3%B3n%20del%20servicio%20de DIAGNOSTICO DE VALBULA ELECTRONICA" class="boton_cotizar_whatsapp" title="Pedir por whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Pedir por whatsapp</a>
+              </div>
+            </div>
+            <!-- SERVICIO 4 -->
+            <div class="card">
+              <div class="card__border"></div>
+              <div class="card_title__container">
+                <span class="card_title">PREPARACIÓN DE TURBO ESPECIFICAMENTE PARA EL REQUERIMIENTO DEL CLIENTE</span>
+                <p class="card_paragraph">Valor sugeto a los requerimientos del cliente.</p>
+              </div>
+              <hr class="line" />
+              <ul class="card__list">
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Para competición</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Para carrera.</span>
+                </li>
+                <li class="card__list_item">
+                  <span class="check">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="check_svg">
+                      <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd"></path>
+                    </svg>
+                  </span>
+                  <span class="list_text">Para potenciar el vehiculo.</span>
+                </li>
+              </ul>
+              <button class="button" onclick="mostrarModal('Pide este servicio o producto sin necesidad de logiarte. Hablanos por whatsapp para pedir este servicio', '{% static 'images/info_pagar.jpg' %}')">Antes de cotizar</button>
+              <div class="d-flex">
+                <a href="https://api.whatsapp.com/send?phone=+56999463203&text=Hola%20necesito%20informaci%C3%B3n%20del%20servicio%20de PREPARACIÓN DE TURBO ESPECIFICAMENTE PARA EL REQUERIMIENTO DEL CLIENTE" class="boton_cotizar_whatsapp" title="Pedir por whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Pedir por whatsapp</a>
+              </div>
+            </div>
+        </section>
+          <!--VENTANA EMERGENTE-->
+          <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="cerrarModal()">&times;</span>
+                <img id="modal-img" src="" alt="Imagen">
+                <h3 id="modal-title">Hablanos por whatsapp para pedir este servicio </h3>
+            </div>
+        </div> 
+        <!--PREGUNTAS Y RESPUESTAS-->
+        <section class="preguntas">
+            <h2 class="faq-title">Preguntas Frecuentes</h2>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleAnswer(this)">1. ¿Los turbos recirculan los gases de escape en el motor?</button>
+                <div class="faq-answer" data-answer="Esa afirmación es incorrecta. Los turbos aprovechan el impulso de los gases de escape para hacer girar un rotor, y mediante este movimiento, el turbo aspira aire desde el filtro, lo comprime y lo introduce a presión en los cilindros del motor.">
+                    <p></p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleAnswer(this)">2. ¿Cómo sé si mi turbo está malo?</button>
+                <div class="faq-answer" data-answer="Algunos síntomas de turbo malo son pérdida de potencia del vehículo y exceso de humo azul o negro en el escape, además de un ruido molesto (chillido). Una inspección visual del turbo puede mostrar desgaste en la turbina, y si el eje tiene juego perceptible, debe ser reparado en nuestro taller.">
+                    <p></p>
+                </div>
+            </div>
+        
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleAnswer(this)">3. Mi turbo mete ruido, pero no ha perdido potencia en el motor</button>
+                <div class="faq-answer" data-answer="Este problema suele deberse a fugas en las mangueras de admisión o empaquetaduras del múltiple de admisión. Más del 70% de los casos son por fugas en las empaquetaduras de escape.">
+                    <p></p>
+                </div>
+            </div>
+        
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleAnswer(this)">4. Mi turbo está en buen estado, pero el vehículo no reacciona</button>
+                <div class="faq-answer" data-answer="Esto puede ocurrir por problemas de restricción en el flujo de aire, como un filtro de aire sucio o un flujómetro defectuoso. También se puede deber a una restricción en el escape (catalítico sucio, golpes en el escape, o un diámetro de escape incorrecto).">
+                    <p></p>
+                </div>
+            </div>
+        </section>
+        <br><br>
+        
+        <!--Footer-->
+        <footer class="footer-section">
+          <div class="footer-container">
+              <div class="footer-logo">
+                  <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                  <p>Potenciamos tu motor con precisión y confianza.</p>
+                  <div class="payment-methods">
+                      <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                  </div>
+              </div>
+      
+              <div class="footer-links">
+                  <div>
+                      <h4>Portal clientes</h4>
+                      <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                      
+                      <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                  </div>
+                  <div>
+                      <h4>Atención al cliente</h4>
+                      <a href="tel:+56999463203">+569 99463203/a>
+                      <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                  </div>
+                  <div>
+                      <h4>Páginas</h4>
+                      <a href="#">Inicio</a>
+                      <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                      <a href="{% url 'home_inicio' %}">productos</a>
+                      <a href="{% url 'nosotros' %}">Nosotros</a>
+                      <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                  </div>
+                  <div>
+                      <h4>Ayuda</h4>
+                      <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                      <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                      <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                      <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                  </div>
+              </div>
+          </div>
+      
+          <div class="footer-bottom">
+              <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+              <div class="social-icons">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                  <a href="#"><i class="fab fa-linkedin"></i></a>
+                  <a href=""><i class="fab fa-instagram"></i></a>
+              </div>
+          </div>
+      </footer>  
+        <!--PREGUNTAS Y RESPUESTAS-->  
+        <script>
+          //PREGUNTAS Y RESPUESTAS.
+          let typingInProgress = false; // Variable para controlar el estado de la animación
+      
+          function toggleAnswer(button) {
+              const answer = button.nextElementSibling;
+              const answerText = answer.getAttribute('data-answer');
+              const answerParagraph = answer.querySelector('p');
+      
+              // Si ya se está mostrando el texto completo, lo oculta
+              if (answer.classList.contains('active')) {
+                  answer.classList.remove('active');
+                  answerParagraph.textContent = '';
+                  typingInProgress = false;
+                  return;
+              }
+      
+              // Ocultar otras respuestas abiertas y detener sus animaciones
+              document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
+                  if (otherAnswer !== answer) {
+                      otherAnswer.classList.remove('active');
+                      otherAnswer.querySelector('p').textContent = '';
+                  }
+              });
+      
+              answer.classList.add('active');
+              answerParagraph.textContent = ''; // Reiniciar el texto
+              typingInProgress = true; // Iniciar la animación de máquina de escribir
+      
+              let i = 0;
+              
+              function typeWriter() {
+                  if (i < answerText.length && typingInProgress) {
+                      answerParagraph.textContent += answerText.charAt(i);
+                      i++;
+                      setTimeout(typeWriter, 20); // Velocidad de la animación
+                  } else if (!typingInProgress) {
+                      // Si la animación fue interrumpida, muestra el texto completo
+                      answerParagraph.textContent = answerText;
+                  }
+              }
+              
+              typeWriter();
+      
+              // Si se vuelve a hacer clic en la misma pregunta, muestra el texto completo
+              button.onclick = function () {
+                  if (typingInProgress) {
+                      typingInProgress = false; // Detener la animación de máquina de escribir
+                      answerParagraph.textContent = answerText; // Mostrar el texto completo
+                  } else {
+                      toggleAnswer(button); // Llamada recursiva para cerrar la respuesta
+                  }
+              };
+          }
+      </script>             
+      
+      <!-- AOS-->
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      <script>
+          AOS.init();
+      </script>
+      <!--libreria externas-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+      
+      <!-- arlet JS-->
+      <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+      <!-- Bootstrap core JS-->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+      <!-- Core theme JS-->
+      <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+      <!-- PARA RESEÑAS-->
+       
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+      <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!--DESPUES PEGAR A TODOS-->
+
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        <!--COHERE-->
+      <script>
+          document.getElementById("openChatbot").addEventListener("click", function () {
+              document.getElementById("chatbotContainer").classList.remove("hidden");
+          });
+      
+          document.getElementById("closeChatbot").addEventListener("click", function () {
+              document.getElementById("chatbotContainer").classList.add("hidden");
+          });
+      
+          document.getElementById("chatForm").addEventListener("submit", async function (e) {
+              e.preventDefault();
+      
+              const userMessage = document.getElementById("userInput").value;
+              const chatMessages = document.getElementById("chatMessages");
+      
+              // Mostrar el mensaje del usuario
+              const userBubble = document.createElement("div");
+              userBubble.className = "user-message";
+              userBubble.innerHTML = '<strong style="color: red;">Usuario:</strong> ' + userMessage;
+              chatMessages.appendChild(userBubble);
+      
+              // Enviar la pregunta al backend
+              const response = await fetch("/api/chatbot/", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ message: userMessage }),
+              });
+      
+              const data = await response.json();
+      
+              // Mostrar la respuesta del chatbot
+              const botBubble = document.createElement("div");
+              botBubble.className = "bot-message";
+              botBubble.innerHTML = '<strong style="color: blue;">Bot:</strong> ' + data.response;
+              chatMessages.appendChild(botBubble);
+      
+              // Limpiar el input
+              document.getElementById("userInput").value = "";
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+          document.getElementById("resetChatbot").addEventListener("click", function () {
+              const chatMessages = document.getElementById("chatMessages");
+              chatMessages.innerHTML = '';  // Eliminar todos los mensajes
+              document.getElementById("userInput").value = '';  // Limpiar el campo de entrada
+          });
+      </script>
+    </body>
+</html>

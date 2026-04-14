@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>historial</title>
+</head>
+<body>
+    <h2 style="text-align: center; font-size: 400%; margin-top: 100px; color: rgb(2, 2, 2);">Historial de Actividad</h2>
+    <div class="container " style="padding: 5%; ">
+      <div class="col-12 col-md-8 col-lg-12 col-xl-11">
+        <div class="card" style="border-radius: 2rem; background-color: rgba(254, 254, 254, 0.656); ">
+            <div style="padding: 2%; margin-left: 30px; font-size: 110%; overflow-x: hidden; max-height: 483px;">
+                <hr>
+                {% for log in activity_log %}
+                <br>
+                <strong>*{{ log.activity_type }}</strong> - {{ log.timestamp }}
+                <br><br>
+                <p>{{ log.details }}</p>
+                <br>
+                <hr>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

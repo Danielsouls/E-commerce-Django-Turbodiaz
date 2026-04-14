@@ -1,0 +1,64 @@
+#CookielawBanner {
+  width: 100%;
+  z-index: 9999;
+  background-color: #f8f9fa;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 6rem;
+}
+
+#CookielawBanner .cookieInfo {
+  flex: 1;
+  margin-right: 6rem;
+}
+
+#CookielawBanner .cookieInfo h5 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#CookielawBanner .cookieInfo p {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.9;
+}
+
+#CookielawBanner .cookieActions {
+  display: flex;
+  gap: 1rem;
+}
+
+#CookielawBanner a.btn {
+  display: inline-block;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: #1984f2;
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: 2px solid #1984f2;
+  font-size: 0.875rem;
+  transition: 0.3s ease-out;
+}
+
+#CookielawBanner a.btn:hover {
+  background-color: white;
+  color: #1984f2;
+}
+
+#CookielawBanner a.btn.reject {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#CookielawBanner a.btn.reject:hover {
+  color: #dc3545;
+}

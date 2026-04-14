@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- Bootstrap versión estable -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet" />
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+
+        <!--PaARARESEÑAS-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+  
+    </head>
+    <body>
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo Diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <a href="{% url 'menu' %}" class="logo-text">Turbo Diaz</a>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'servicios' %}">Servicios</a></li>
+                    <li><a href="{% url 'home_inicio' %}">Productos</a></li>
+                    <li><a href="{% url 'dondeestamos' %}">Donde Estamos</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Compras & Datos
+                        </button>
+                        <ul class="dropdown-menu" style="color: red;">
+                        <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <li><a href="#" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %}                     
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+        <!--Sobre turbodiaz-->
+        <section class="h_historias">
+            <div class="container">
+              <div class="text-content">
+                <h2 class="title">Como nacio el emprendimiento Turbo diaz.</h2>
+                <h3 class="subtitle">Turbo Díaz nació en 2012, cuando Raúl Díaz.</h3>
+                <p class="description">
+                    Un apasionado por los motores y la mecánica automotriz, decidió transformar su experiencia en los talleres en un proyecto personal. 
+                    Desde muy joven, Raúl había trabajado junto a su padre en la reparación de vehículos y, con el tiempo, desarrolló un interés particular por los sistemas de turboalimentación. 
+                    Fascinado por cómo los turbos podían potenciar el rendimiento de los motores, empezó a especializarse en su diagnóstico, reparación y optimización.
+                    Ese año, con la idea de construir algo que trascendiera, Raúl reunió a su familia para compartir su visión: un emprendimiento familiar enfocado en 
+                    la reparación y mantenimiento de turbos. "El mercado de los turbos está creciendo y necesitamos un negocio que sea nuestra huella", dijo con entusiasmo.
+                    Con el apoyo de sus hermanos y su esposa, estableció un pequeño taller en su propia casa, adaptando el garaje para convertirse en el centro de operaciones 
+                    de lo que llamaron "Turbo Díaz"
+                    Turbo Díaz, desde sus humildes comienzos, ha mantenido el espíritu que lo vio nacer: ser un negocio familiar que combina conocimiento técnico, 
+                    pasión por la mecánica y un trato cercano con sus clientes. Hoy en día, el taller sigue creciendo, pero sin olvidar su esencia y el sueño que dio inicio a todo.
+                </p>
+              </div>
+              <div class="image-content">
+                <div class="image-background">
+                  <img src="../../assets/images/menu/fondo_1.jpg" alt="Profile Image">
+                </div>
+              </div>
+            </div>
+          </section>
+        <!--Footer-->
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                    <p>Potenciamos tu motor con precisión y confianza.</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                    </div>
+                </div>
+        
+                <div class="footer-links">
+                    <div>
+                        <h4>Portal clientes</h4>
+                        <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                        
+                        <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                    </div>
+                    <div>
+                        <h4>Atención al cliente</h4>
+                        <a href="tel:+56999463203">+569 99463203/a>
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </div>
+                    <div>
+                        <h4>Páginas</h4>
+                        <a href="#">Inicio</a>
+                        <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                        <a href="{% url 'home_inicio' %}">productos</a>
+                        <a href="{% url 'nosotros' %}">Nosotros</a>
+                        <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                    </div>
+                    <div>
+                        <h4>Ayuda</h4>
+                        <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                        <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                        <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                        <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>               
+    
+        <!-- AOS-->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+        <!--libreria externas-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+        
+        <!-- arlet JS-->
+        <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+        <!-- PARA RESEÑAS-->
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!--DESPUES PEGAR A TODOS-->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    </body>
+</html>

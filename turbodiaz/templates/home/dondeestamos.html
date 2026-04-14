@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Turbodiaz</title>
+        <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.png" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
+        <!-- boostrap-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        
+        <!--************************************************************************************************-->
+        <link href="{% static 'css/jquery.alerts.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free-5.15.4-web/css/all.css' %}" />
+
+        <!-- CSS -->
+        <link href="{% static 'css/main.css' %}?id={{ csrf_token}}" rel="stylesheet" />
+
+        <!-- Librerias externa de animacion-->
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+        <!-- Whatapp-->
+        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <!-- Whatsapp -->
+        <audio id="sonido">
+            <source src="{% static 'audio/WhatsApp.mp3' %}" type="audio/mp3">
+            Tu navegador no admite audio HTML5.
+        </audio>
+        <a href="https://api.whatsapp.com/send?phone=56950514962&text=Turbodiaz:Hola%20habla%20con%20nosotros!" 
+        class="float whatsapp-turbodiaz" 
+        title="Estamos disponibles. Cuéntanos en qué te podemos ayudar!!!" 
+        target="_blank" 
+        data-aos="fade-down-left" 
+        data-aos-duration="3000" 
+        onclick="playSound()">
+            <div class="loader whatsapp-turbodiaz-loader"></div>
+            <i class="fab fa-whatsapp my-float whatsapp-turbodiaz-icon"></i>
+        </a>
+        <!-- Whatsapp fin -->
+
+        <!-- Preloader -->
+        <div id="preloader">
+            <div class="preloader-content">
+                <img src="{% static 'images/favicon.png' %}" alt="Icono Turbo Diaz" class="preloader-icon">
+                <p class="preloader-text">Turbo Diaz ... Cargando</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Navigation-->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <!-- Coloca el logo de tu marca aquí -->
+                    <img src="{% static 'images/favicon.png' %}" alt="Logo" />
+                    <a href="{% url 'menu' %}" class="logo-text">Turbo Diaz</a>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="{% url 'menu' %}">Inicio</a></li>
+                    <li><a href="{% url 'home_inicio' %}">Productos</a></li>
+                    <li><a href="{% url 'nosotros' %}">Nosotros</a></li>
+                    {% if user.is_authenticated %}
+                    <!-- Example single danger button -->
+                    <div class="btn-group" style="color: #003eb1;">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Compras & Datos
+                        </button>
+                        <ul class="dropdown-menu" style="color: red;">
+                        <li><a class="dropdown-item" href="{% url 'datos' %}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'mis_productos' %}">Mis compras</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'cambiar_password' %}">Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)"  onclick="salir('{% url 'acceso_salir' %}');">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <li><a href="#" class="login-btn">Iniciar Sesión</a></li> 
+                    {% endif %}   
+                </ul>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- Botón del Chatbot -->
+                <div class="chatbot-icon">
+                    <button id="openChatbot" class="btn btn-chatbot">
+                        <i class="fas fa-robot"></i> Chat
+                    </button>
+                </div>  
+            </div>
+        </nav>
+        <!--COHERE-->
+        <div id="chatbotContainer" class="chatbot-container hidden">
+            <div class="chatbot-header">
+                <h5>Turbo Bot</h5>
+                <button id="resetChatbot" class="reset-chatbot">↻</button>
+                <button id="closeChatbot" class="close-chatbot">&times;</button>
+            </div>
+            <div class="chatbot-body">
+                <div id="chatMessages" class="chat-messages"></div>
+                <form id="chatForm">
+                    <input type="text" id="userInput" placeholder="Escribe tu pregunta sobre turbos..." required />
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+        <!--titulo-->
+        <div>
+            <h1 class="site-heading text-center text-faded">
+                <span class="site-heading-upper text-primary mb-3" data-aos="zoom-out-down" data-aos-duration="2000">Estamos ubicados Km 681 panamericana sur</span>
+                <span class="site-heading-lower">Mapa</span>
+            </h1>
+        </div>
+        <section class="page-section about-heading">
+            <div class="container">
+                <!--mapa-->
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3109.014691135076!2d-72.63007922345243!3d-38.80921667174297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9614d739d138c335%3A0xdc27ede1612dfc99!2sTurbo%20Diaz!5e0!3m2!1ses!2scl!4v1730498683897!5m2!1ses!2scl" 
+                        allowfullscreen 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade" 
+                        data-aos="zoom-in" 
+                        data-aos-duration="2000">
+                    </iframe>
+                </div>
+                <!--cuerpo de informacion-->
+                <div class="about-heading-content" data-aos="zoom-out">
+                    <div class="row">
+                        <div class="col-xl-9 col-lg-10 mx-auto">
+                            <div class="bg-faded rounded p-5">
+                                <h2 class="section-heading mb-4">
+                                    <span class="section-heading-upper">¿Como llegar?</span>
+                                </h2>
+                                <p>Nos encontramos estratégicamente ubicados en el kilómetro 681 de la Panamericana Sur, en la ciudad de Temuco. Nuestra localización facilita un acceso rápido y conveniente tanto para clientes locales como para aquellos que vienen desde otras regiones. Este punto privilegiado de la ciudad nos permite ofrecer nuestros servicios de manera eficiente, garantizando la satisfacción y comodidad de nuestros clientes al visitarnos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br><br>
+        <!--texto de un poco de ayuda?-->
+        <h1 class="site-heading text-center text-faded">
+            <span class="site-heading-upper text-primary mb-3" data-aos="zoom-out-down" data-aos-duration="2000">¿Un poco de ayuda?</span>
+        </h1>
+        <!--CARRUSEL-->
+        <div id="carouselExampleCaptions" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{% static 'images/dondeestamos/CNorte.png' %}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-block">
+                  <h1 style="color: rgb(2, 11, 48);">De Norte a Sur</h1>
+                  <h4 class="justificado">De camino hacia Temuco por la carretera panamericana 
+                    sur antes de llegar a la cantera,toma la rotonda 
+                    para dar la vuela a la carretera de servicio para llegar a Turbo Diaz.
+                  </h4>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'images/dondeestamos/CSur.png' %}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-block">
+                  <h1 style="color: rgb(2, 11, 48);">De Sur a Norte</h1>
+                  <h4 class="justificado">De camino a Metrenco, antes de llegar a la pasarela de la cantera por la<br>
+                    carretera Panamericana sur hay un cambio de vía hacia la carretera de servicio
+                    luego se sigue recto hasta llegar a Turbo Diaz.</h4>
+                </div>
+              </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <br><br>
+        <!--Footer-->
+        <footer class="footer-section">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="{% static 'images/favicon.png' %}" alt="Auto Expertos" class="logo">
+                    <p>Potenciamos tu motor con precisión y confianza.</p>
+                    <div class="payment-methods">
+                        <img src="{% static 'images/webpay.png' %}" alt="Webpay">
+                    </div>
+                </div>
+        
+                <div class="footer-links">
+                    <div>
+                        <h4>Portal clientes</h4>
+                        <a href="{% url 'acceso_login' %}" class="button">Iniciar sesión</a>
+                        
+                        <a href="{% url 'acceso_registro' %}" class="button">Registrarse</a>
+                    </div>
+                    <div>
+                        <h4>Atención al cliente</h4>
+                        <a href="tel:+56999463203">+569 99463203/a>
+                        <a href="mailto:raul@turbodiaz.cl">raul@turbodiaz.cl</a>
+                    </div>
+                    <div>
+                        <h4>Páginas</h4>
+                        <a href="#">Inicio</a>
+                        <a href="{% url 'servicios' %}" class="button">Servicios</a>
+                        <a href="{% url 'home_inicio' %}">productos</a>
+                        <a href="{% url 'nosotros' %}">Nosotros</a>
+                        <a href="{% url 'dondeestamos' %}">Donde estamos</a>
+                    </div>
+                    <div>
+                        <h4>Ayuda</h4>
+                        <a href="{% url 'centro_de_ayudas' %}" class="button">Centro de ayuda</a>
+                        <a href="{% url 'Pago_Seguro' %}" class="button">Pago seguro</a>
+                        <a href="{% url 'Garantia' %}" class="button">Garantía</a>
+                        <a href="{% url 'terminos' %}">Términos y condiciones</a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2024 Turbo Diaz. Todos los derechos reservados </p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>               
+        
+        <!-- AOS-->
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+        <!--libreria externas-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3"></script>
+        
+        <!-- arlet JS-->
+        <script src="{% static 'js/jquery-2.0.0.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'js/jquery.alerts.min.js' %}"></script>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="{% static 'js/main.js' %}?id={{ csrf_token }}"></script>
+
+        <!-- PARA RESEÑAS-->
+         
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- jQuery actualizado (opcional, ya que Bootstrap 5 no requiere jQuery) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!--DESPUES PEGAR A TODOS-->
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        <!--COHERE-->
+        <script>
+            document.getElementById("openChatbot").addEventListener("click", function () {
+                document.getElementById("chatbotContainer").classList.remove("hidden");
+            });
+        
+            document.getElementById("closeChatbot").addEventListener("click", function () {
+                document.getElementById("chatbotContainer").classList.add("hidden");
+            });
+        
+            document.getElementById("chatForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+        
+                const userMessage = document.getElementById("userInput").value;
+                const chatMessages = document.getElementById("chatMessages");
+        
+                // Mostrar el mensaje del usuario
+                const userBubble = document.createElement("div");
+                userBubble.className = "user-message";
+                userBubble.innerHTML = '<strong style="color: red;">Usuario:</strong> ' + userMessage;
+                chatMessages.appendChild(userBubble);
+        
+                // Enviar la pregunta al backend
+                const response = await fetch("/api/chatbot/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userMessage }),
+                });
+        
+                const data = await response.json();
+        
+                // Mostrar la respuesta del chatbot
+                const botBubble = document.createElement("div");
+                botBubble.className = "bot-message";
+                botBubble.innerHTML = '<strong style="color: blue;">Bot:</strong> ' + data.response;
+                chatMessages.appendChild(botBubble);
+        
+                // Limpiar el input
+                document.getElementById("userInput").value = "";
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+            document.getElementById("resetChatbot").addEventListener("click", function () {
+                const chatMessages = document.getElementById("chatMessages");
+                chatMessages.innerHTML = '';  // Eliminar todos los mensajes
+                document.getElementById("userInput").value = '';  // Limpiar el campo de entrada
+            });
+        </script>
+    </body>
+</html>
